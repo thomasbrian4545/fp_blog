@@ -60,7 +60,7 @@
     <label for="gambar_profil" class="col-md-4 col-form-label text-md-end">Gambar Profil</label>
 
     <div class="col-md-6">
-        <img
+        <img id="display_gambar_profil" class="img-thumbnail w-25 mb-2"
             @if ($tombol == 'Daftar') src="{{ asset('img/default_profil.jpg') }}"
             @elseif ($tombol == 'Update')
                 src="{{ asset('storage/uploads/' . $user->gambar_profil) }}" @endif>

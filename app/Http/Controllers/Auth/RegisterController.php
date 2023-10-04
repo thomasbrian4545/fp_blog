@@ -50,9 +50,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'nama' => ['required', 'string', 'max:255'],
+            'gambar_profil' => ['sometimes', 'file', 'image', 'max:2000'],
         ]);
     }
 
@@ -64,10 +65,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $request = request();
+        if ($request->hasFile('gambar_profil')) {
+            // $slug = Str::slug($data['nama']);
+            $extFile = $request->gambar_profil->getClientOriginalExtension();
+            $namaFile = 'user-' . time() . "." . $extFile;
+            $request->gambar_profil->storeAs('public/uploads', $namaFile);
+        } else {
+            $namaFile = 'default_profile.jpg';
+        }
+
         return User::create([
-            'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'nama' => $data['nama'],
+            'gambar_profil' => $namaFile,
         ]);
     }
 }
